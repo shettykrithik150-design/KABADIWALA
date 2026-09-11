@@ -1,0 +1,1206 @@
+{
+  "info": {
+    "_postman_id": "c7a8b41f-82a1-4eb7-9874-1a9df2e5b98a",
+    "name": "KABADIWALA API Collection",
+    "description": "Complete and production-ready Postman collection for KABADIWALA Backend API.\nCovers Authentication, User Profile, Scrap Listings (with Photo Upload & Location), Requests, Pickups, Transactions, and Health / Static file endpoints.\nIncludes automatic token and ID capture across test scripts for seamless workflow testing.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "collectorToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "recyclerToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "collectorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "recyclerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "scrapId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "requestId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pickupId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "transactionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "uploadedFilename",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System & Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "Check if the server is alive and running."
+          }
+        },
+        {
+          "name": "Get Uploaded Scrap Photo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/uploads/scrap/{{uploadedFilename}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                "scrap",
+                "{{uploadedFilename}}"
+              ]
+            },
+            "description": "Retrieve a static uploaded photo from the server."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register - Collector",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test Collector\",\n    \"email\": \"collector@example.com\",\n    \"password\": \"password123\",\n    \"phone\": \"9876543210\",\n    \"role\": \"collector\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new user with role 'collector'."
+          }
+        },
+        {
+          "name": "Register - Recycler",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Green Earth Recyclers\",\n    \"email\": \"recycler@example.com\",\n    \"password\": \"password123\",\n    \"phone\": \"9123456789\",\n    \"role\": \"recycler\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new user with role 'recycler'."
+          }
+        },
+        {
+          "name": "Login - Collector",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('collectorToken', jsonData.token);",
+                  "}",
+                  "if (jsonData.user && jsonData.user.id) {",
+                  "    pm.collectionVariables.set('collectorId', jsonData.user.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"collector@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticates collector and auto-saves token to collection variables."
+          }
+        },
+        {
+          "name": "Login - Recycler",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('recyclerToken', jsonData.token);",
+                  "}",
+                  "if (jsonData.user && jsonData.user.id) {",
+                  "    pm.collectionVariables.set('recyclerId', jsonData.user.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"recycler@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticates recycler and auto-saves token to collection variables."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ]
+            },
+            "description": "Fetch profile of current authenticated user."
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test Collector Updated\",\n    \"phone\": \"9876543299\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ]
+            },
+            "description": "Update name, email, or phone of authenticated user."
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"newSecurePassword456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profile",
+                "password"
+              ]
+            },
+            "description": "Change password after validating current password."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scrap",
+      "item": [
+        {
+          "name": "Add Scrap with Photo (multipart/form-data)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.scrapId) {",
+                  "    pm.collectionVariables.set('scrapId', jsonData.scrapId);",
+                  "}",
+                  "if (jsonData.imageUrl) {",
+                  "    var parts = jsonData.imageUrl.split('/');",
+                  "    pm.collectionVariables.set('uploadedFilename', parts[parts.length - 1]);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Copper Wiring",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "Metal",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "High grade stripped electrical copper wires",
+                  "type": "text"
+                },
+                {
+                  "key": "price_per_kg",
+                  "value": "450.00",
+                  "type": "text"
+                },
+                {
+                  "key": "quantity_kg",
+                  "value": "50.00",
+                  "type": "text"
+                },
+                {
+                  "key": "address",
+                  "value": "42 MG Road, Bengaluru",
+                  "type": "text"
+                },
+                {
+                  "key": "pincode",
+                  "value": "560001",
+                  "type": "text"
+                },
+                {
+                  "key": "latitude",
+                  "value": "12.9716",
+                  "type": "text"
+                },
+                {
+                  "key": "longitude",
+                  "value": "77.5946",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/scrap",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scrap"
+              ]
+            },
+            "description": "Add a scrap listing with multipart photo upload, pricing and GPS coordinates. Collector only."
+          }
+        },
+        {
+          "name": "Add Scrap without Photo (JSON)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.scrapId) {",
+                  "    pm.collectionVariables.set('scrapId', jsonData.scrapId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Carton & Cardboard Boxes\",\n    \"category\": \"Paper\",\n    \"description\": \"Heavy duty corrugated cardboard boxes\",\n    \"price_per_kg\": 14.5,\n    \"quantity_kg\": 120,\n    \"address\": \"100 Indiranagar 100ft Road, Bengaluru\",\n    \"pincode\": \"560038\",\n    \"latitude\": 12.9783,\n    \"longitude\": 77.6408\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/scrap",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scrap"
+              ]
+            },
+            "description": "Add a scrap listing using JSON without uploading a photo. Collector only."
+          }
+        },
+        {
+          "name": "Get All Available Scrap (Default)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/scrap",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scrap"
+              ]
+            },
+            "description": "Public endpoint retrieving available scrap listings with default pagination (page 1, limit 10)."
+          }
+        },
+        {
+          "name": "Get Available Scrap (Search, Filters & Pagination)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/scrap?search=Copper&category=Metal&location=Bengaluru&minPrice=100&maxPrice=600&minQuantity=10&page=1&limit=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scrap"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Copper"
+                },
+                {
+                  "key": "category",
+                  "value": "Metal"
+                },
+                {
+                  "key": "location",
+                  "value": "Bengaluru"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "100"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "600"
+                },
+                {
+                  "key": "minQuantity",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Demonstrates multi-field filtering, substring search and pagination metadata."
+          }
+        },
+        {
+          "name": "Update Scrap (Collector)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"price_per_kg\": 480,\n    \"quantity_kg\": 45,\n    \"address\": \"42 MG Road, 2nd Floor, Bengaluru\",\n    \"pincode\": \"560001\",\n    \"latitude\": 12.9716,\n    \"longitude\": 77.5946\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/scrap/{{scrapId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scrap",
+                "{{scrapId}}"
+              ]
+            },
+            "description": "Update an existing scrap listing owned by the collector."
+          }
+        },
+        {
+          "name": "Delete Scrap (Collector)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/scrap/{{scrapId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "scrap",
+                "{{scrapId}}"
+              ]
+            },
+            "description": "Delete an existing scrap listing and its associated image file from disk. Collector only."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Requests",
+      "item": [
+        {
+          "name": "Create Scrap Request (Recycler)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.requestId) {",
+                  "    pm.collectionVariables.set('requestId', jsonData.requestId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{recyclerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"scrap_id\": \"{{scrapId}}\",\n    \"quantity_requested\": 20,\n    \"notes\": \"Can pick up between 9 AM and 12 PM.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests"
+              ]
+            },
+            "description": "Submit a scrap collection request for a listing. Recycler only."
+          }
+        },
+        {
+          "name": "Get My Requests (Recycler)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{recyclerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                "my"
+              ]
+            },
+            "description": "Retrieve all requests created by the authenticated recycler."
+          }
+        },
+        {
+          "name": "Get Incoming Requests (Collector)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/collector",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                "collector"
+              ]
+            },
+            "description": "Retrieve all incoming requests on scrap listings owned by the authenticated collector."
+          }
+        },
+        {
+          "name": "Update Request Status (Collector)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"accepted\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/{{requestId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                "{{requestId}}",
+                "status"
+              ]
+            },
+            "description": "Accept or reject an incoming request. Status must be 'accepted' or 'rejected'. Collector only."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pickups",
+      "item": [
+        {
+          "name": "Create Pickup (from Request or Scrap)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.pickupId) {",
+                  "    pm.collectionVariables.set('pickupId', jsonData.pickupId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"request_id\": \"{{requestId}}\",\n    \"scheduled_at\": \"2026-09-20T10:00:00.000Z\",\n    \"notes\": \"Vehicle registered KA-01-AB-1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pickups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pickups"
+              ]
+            },
+            "description": "Schedule a pickup linked to an existing request or scrap. Automatically reuses location data if not overridden."
+          }
+        },
+        {
+          "name": "View My Pickups (All)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pickups/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "my"
+              ]
+            },
+            "description": "Retrieve all pickups where caller is either collector or recycler."
+          }
+        },
+        {
+          "name": "View My Pickups (Filter by Status)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pickups/my?status=SCHEDULED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "my"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SCHEDULED"
+                }
+              ]
+            },
+            "description": "Filter pickups by status: PENDING, SCHEDULED, COMPLETED, CANCELLED."
+          }
+        },
+        {
+          "name": "View Pickup by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pickups/{{pickupId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "{{pickupId}}"
+              ]
+            },
+            "description": "Get detailed pickup record by ID. Caller must be an authorized participant."
+          }
+        },
+        {
+          "name": "Update Pickup (Address / Schedule)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"address\": \"42 MG Road, Gate 3, Bengaluru\",\n    \"scheduled_at\": \"2026-09-21T11:00:00.000Z\",\n    \"notes\": \"Rescheduled upon mutual agreement.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pickups/{{pickupId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "{{pickupId}}"
+              ]
+            },
+            "description": "Update pickup schedule, address, coordinates, or notes. Blocked if COMPLETED or CANCELLED."
+          }
+        },
+        {
+          "name": "Complete Pickup",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pickups/{{pickupId}}/complete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "{{pickupId}}",
+                "complete"
+              ]
+            },
+            "description": "Mark a pickup as COMPLETED. Terminal status (further edits blocked)."
+          }
+        },
+        {
+          "name": "Cancel Pickup",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pickups/{{pickupId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pickups",
+                "{{pickupId}}",
+                "cancel"
+              ]
+            },
+            "description": "Cancel a pickup. Terminal status (further edits blocked)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create Transaction (via Pickup)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.transactionId) {",
+                  "    pm.collectionVariables.set('transactionId', jsonData.transactionId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"pickup_id\": \"{{pickupId}}\",\n    \"amount\": 900,\n    \"notes\": \"Cash settlement on handover\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions"
+              ]
+            },
+            "description": "Create a transaction referencing a pickup. Collector or recycler."
+          }
+        },
+        {
+          "name": "Create Transaction (via Request with auto amount)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.transactionId) {",
+                  "    pm.collectionVariables.set('transactionId', jsonData.transactionId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"request_id\": \"{{requestId}}\",\n    \"notes\": \"Calculates total amount automatically from requested quantity * price per kg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions"
+              ]
+            },
+            "description": "Create a transaction linked to a request; automatically computes amount if omitted."
+          }
+        },
+        {
+          "name": "View My Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "my"
+              ]
+            },
+            "description": "View all transactions where user is collector or recycler."
+          }
+        },
+        {
+          "name": "View My Transactions (Filter by Status)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/my?status=PENDING",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "my"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                }
+              ]
+            },
+            "description": "Filter transactions by status: PENDING, COMPLETED, CANCELLED, FAILED."
+          }
+        },
+        {
+          "name": "View Transaction by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "{{transactionId}}"
+              ]
+            },
+            "description": "Retrieve details of a single transaction by ID. Caller must be an authorized participant."
+          }
+        },
+        {
+          "name": "Update Transaction Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"COMPLETED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "transactions",
+                "{{transactionId}}",
+                "status"
+              ]
+            },
+            "description": "Update transaction status (COMPLETED, CANCELLED, FAILED). Completed or cancelled transactions cannot be edited further."
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Service",
+      "item": [
+        {
+          "name": "Predict Scrap Material (Image Upload)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collectorToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/predict",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ai",
+                "predict"
+              ]
+            },
+            "description": "Uploads an image in the 'file' field and forwards it to the FastAPI AI service to classify the scrap material, estimate price per kg, and compute confidence."
+          }
+        }
+      ]
+    }
+  ]
+}

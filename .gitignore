@@ -1,0 +1,23 @@
+# Environment variables
+.env
+*.env
+.env.local
+.env.*.local
+BACKEND/.env
+
+# Node dependencies
+node_modules/
+BACKEND/node_modules/
+
+# Logs
+logs/
+BACKEND/logs/
+*.log
+
+# Uploads
+BACKEND/uploads/scrap/*
+!BACKEND/uploads/scrap/.gitkeep
+
+# Operating System Files
+.DS_Store
+Thumbs.db
