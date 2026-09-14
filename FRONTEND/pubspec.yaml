@@ -1,0 +1,45 @@
+name: kabadiwala_app
+description: Scrap collection app for kabadiwalas - AI classification, fair pricing, offline-first sync.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # Offline-first local storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Networking
+  http: ^1.2.0
+  connectivity_plus: ^6.0.0
+
+  # Camera / image capture for "Scan Scrap"
+  image_picker: ^1.1.0
+
+  # Location for nearby recyclers
+  geolocator: ^12.0.0
+
+  # State management (simple, beginner-friendly)
+  provider: ^6.1.2
+
+  # Unique transaction IDs
+  uuid: ^4.4.0
+
+  # Local file paths (used with Hive)
+  path_provider: ^2.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.9
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
